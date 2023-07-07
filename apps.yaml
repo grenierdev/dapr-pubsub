@@ -1,0 +1,53 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publisher
+  labels:
+    app: publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publisher
+  template:
+    metadata:
+      labels:
+        app: publisher
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: publisher
+        dapr.io/app-port: "8080"
+    spec:
+      containers:
+      - name: publisher
+        image: dapr-deno-publisher
+        imagePullPolicy: IfNotPresent
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: worker
+        dapr.io/app-port: "8080"
+    spec:
+      containers:
+      - name: worker
+        image: dapr-deno-worker
+        imagePullPolicy: IfNotPresent
