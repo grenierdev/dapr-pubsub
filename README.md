@@ -64,8 +64,6 @@ wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O 
 kubectl create namespace dapr-test
 helm upgrade --install dapr dapr/dapr --namespace dapr-test --wait
 helm upgrade --install dapr-dashboard dapr/dapr-dashboard --namespace dapr-test --wait
-helm upgrade --install redis bitnami/redis --namespace dapr-test --wait
-kubectl --namespace dapr-test apply --filename redis-dapr.yaml
 ```
 
 ## Dashboard
@@ -76,10 +74,11 @@ dapr dashboard -k -n dapr-test
 # 5. Deploy Services
 ```sh
 kubectl create namespace dapr-apps
+helm upgrade --install redis bitnami/redis --namespace dapr-apps --wait
+kubectl --namespace dapr-apps apply --filename redis-dapr.yaml
 docker build ./publisher -t dapr-deno-publisher
 docker build ./worker -t dapr-deno-worker
 minikube image load dapr-deno-publisher
 minikube image load dapr-deno-worker
 kubectl --namespace dapr-apps apply --filename apps.yaml
-kubectl --namespace dapr-apps rollout status deployment publisher
 ```

@@ -18,12 +18,12 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: publisher
-        dapr.io/app-port: "8080"
     spec:
       containers:
       - name: publisher
         image: dapr-deno-publisher
         imagePullPolicy: IfNotPresent
+        readinessProbe: null
 
 ---
 
@@ -45,9 +45,12 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: worker
-        dapr.io/app-port: "8080"
+        dapr.io/app-port: "3000"
     spec:
       containers:
       - name: worker
         image: dapr-deno-worker
         imagePullPolicy: IfNotPresent
+        readinessProbe: null
+        ports:
+        - containerPort: 3000
